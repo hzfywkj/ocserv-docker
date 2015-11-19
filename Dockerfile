@@ -6,7 +6,7 @@ RUN apt-get install build-essential libwrap0-dev libpam0g-dev libdbus-1-dev libr
 
 RUN cd /root && wget http://www.infradead.org/ocserv/download.html && export ocserv_version=$(cat download.html | grep -o '[0-9]*\.[0-9]*\.[0-9]*') \
 	&& wget ftp://ftp.infradead.org/pub/ocserv/ocserv-$ocserv_version.tar.xz && tar xvf ocserv-$ocserv_version.tar.xz \
-	&& cd ocserv-$ocserv_version && ./configure --prefix=/usr --sysconfdir=/etc --with-local-talloc && make && make install \
+	&& cd ocserv-$ocserv_version && ./configure --prefix=/usr --sysconfdir=/usr/local --with-local-talloc && make && make install \
 	&& rm -rf /root/download.html && rm -rf ocserv-*
 
 ADD ./certs /opt/certs
@@ -15,5 +15,5 @@ RUN certtool --generate-privkey --outfile /opt/certs/ca-key.pem && certtool --ge
 ADD ./bin /usr/local/bin
 RUN chmod a+x /usr/local/bin/*
 
-WORKDIR /etc/ocserv
+WORKDIR /usr/local/ocserv
 CMD ["vpn_run"]
